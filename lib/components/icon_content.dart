@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'constants.dart';
+import '../variables/constants.dart';
 
 class IconContent extends StatelessWidget {
   IconContent({required this.iconWidget, required this.textString});
@@ -12,7 +12,7 @@ class IconContent extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Icon(iconWidget, size: kSizeIcon),
+        Icon(iconWidget, size: kLargeSize),
         const SizedBox(
           height: kSpaceBetween,
         ),

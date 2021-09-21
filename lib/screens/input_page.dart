@@ -1,10 +1,13 @@
-import 'package:bmi_calculator_flutter_project/gender_enum.dart';
-import 'package:bmi_calculator_flutter_project/round_icon_button.dart';
+import 'package:bmi_calculator_flutter_project/components/bottom_button.dart';
+import 'package:bmi_calculator_flutter_project/components/calculator_brain.dart';
+import 'package:bmi_calculator_flutter_project/variables/gender_enum.dart';
+import 'package:bmi_calculator_flutter_project/screens/result_page.dart';
+import 'package:bmi_calculator_flutter_project/components/round_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'reusable_card.dart';
-import 'icon_content.dart';
-import 'constants.dart';
+import '../components/reusable_card.dart';
+import '../components/icon_content.dart';
+import '../variables/constants.dart';
 
 Gender selectedGender = Gender.none;
 int heightValue = 150;
@@ -58,56 +61,54 @@ class _InputPageState extends State<InputPage> {
             ),
           ),
           Expanded(
-            child: Expanded(
-              child: ReusableCard(
-                onPress: () {},
-                colour: kSecondaryColour,
-                cardChild: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Text(
-                      'HEIGHT',
-                      style: kTextStringStyle,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      textBaseline: TextBaseline.alphabetic,
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      children: <Widget>[
-                        Text(
-                          heightValue.toString(),
-                          style: kTextStringLargeStyle,
-                        ),
-                        const Text(
-                          'cm',
-                          style: kTextStringStyle,
-                        ),
-                      ],
-                    ),
-                    SliderTheme(
-                      data: SliderTheme.of(context).copyWith(
-                          inactiveTrackColor: kGreyColour400,
-                          activeTrackColor: kAccentColour,
-                          thumbColor: kAccentColour,
-                          overlayColor: kAccentColourTransparency,
-                          thumbShape: const RoundSliderThumbShape(
-                              enabledThumbRadius: 15.0),
-                          overlayShape: const RoundSliderOverlayShape(
-                              overlayRadius: 30.0)),
-                      child: Slider(
-                        value: heightValue.toDouble(),
-                        min: 120,
-                        max: 240,
-                        divisions: 120,
-                        onChanged: (double value) {
-                          setState(() {
-                            heightValue = value.round();
-                          });
-                        },
+            child: ReusableCard(
+              onPress: () {},
+              colour: kSecondaryColour,
+              cardChild: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Text(
+                    'HEIGHT',
+                    style: kTextStringStyle,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    textBaseline: TextBaseline.alphabetic,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    children: <Widget>[
+                      Text(
+                        heightValue.toString(),
+                        style: kTextStringLargeStyle,
                       ),
-                    )
-                  ],
-                ),
+                      const Text(
+                        'cm',
+                        style: kTextStringStyle,
+                      ),
+                    ],
+                  ),
+                  SliderTheme(
+                    data: SliderTheme.of(context).copyWith(
+                        inactiveTrackColor: kGreyColour400,
+                        activeTrackColor: kAccentColour,
+                        thumbColor: kAccentColour,
+                        overlayColor: kAccentColourTransparency,
+                        thumbShape: const RoundSliderThumbShape(
+                            enabledThumbRadius: 15.0),
+                        overlayShape:
+                            const RoundSliderOverlayShape(overlayRadius: 30.0)),
+                    child: Slider(
+                      value: heightValue.toDouble(),
+                      min: 120,
+                      max: 240,
+                      divisions: 120,
+                      onChanged: (double value) {
+                        setState(() {
+                          heightValue = value.round();
+                        });
+                      },
+                    ),
+                  )
+                ],
               ),
             ),
           ),
@@ -180,11 +181,21 @@ class _InputPageState extends State<InputPage> {
               ],
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 10.0),
-            width: double.infinity,
-            height: 80.0,
-            color: kAccentColour,
+          GestureDetector(
+            child: BottomButton(text: 'CALCULATE'),
+            onTap: () {
+              CalculatorBrain calculator =
+                  CalculatorBrain(height: heightValue, weight: weightValue);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ResultPage(
+                      bmiResult: calculator.calculateBMI(),
+                      resultText: calculator.getResult(),
+                      interpretation: calculator.getInterpretation(),
+                    ),
+                  ));
+            },
           )
         ],
       ),
